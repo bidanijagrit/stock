@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>IPO JSS Admin (No Login)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: "Segoe UI", sans-serif; margin: 0; background: #0d1117; color: #e6edf3; }
+    header { padding: 16px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; }
+    main { padding: 16px 20px; max-width: 1100px; margin: 0 auto; }
+    .card { background: #161b22; border: 1px solid #1f2937; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+    label { display: block; margin: 6px 0 2px; font-size: 13px; color: #9ca3af; }
+    input, select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #243043; background: #0d1117; color: #e6edf3; }
+    button { cursor: pointer; border: none; border-radius: 8px; padding: 10px 12px; font-weight: 700; }
+    .primary { background: #2563eb; color: #fff; }
+    .danger { background: #f85149; color: #fff; }
+    .muted { color: #9ca3af; font-size: 12px; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    th, td { border-bottom: 1px solid #1f2937; padding: 8px; text-align: left; }
+    th { color: #9ca3af; font-weight: 600; }
+    .flex { display: flex; gap: 10px; flex-wrap: wrap; }
+    .w-half { flex: 1 1 260px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div><strong>IPO JSS Admin</strong></div>
+    <div class="muted">No login required (secure via DB rules!)</div>
+  </header>
+
+  <main>
+    <!-- IPO form -->
+    <div class="card">
+      <h3>Add / Update IPO</h3>
+      <div class="flex">
+        <div class="w-half">
+          <label>IPO ID (unique key)</label>
+          <input id="ipoId" placeholder="e.g. novatech-2025" />
+        </div>
+        <div class="w-half">
+          <label>Name</label>
+          <input id="ipoName" placeholder="NovaTech Systems" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Status</label>
+          <select id="ipoStatus">
+            <option>Open</option>
+            <option>Closed</option>
+            <option>Upcoming</option>
+          </select>
+        </div>
+        <div class="w-half">
+          <label>Board</label>
+          <select id="ipoBoard">
+            <option>Mainboard</option>
+            <option>SME</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Open Date</label>
+          <input id="ipoOpen" placeholder="15 Dec 2025" />
+        </div>
+        <div class="w-half">
+          <label>Close Date</label>
+          <input id="ipoClose" placeholder="18 Dec 2025" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Price Band</label>
+          <input id="ipoPriceBand" placeholder="₹120 – ₹126" />
+        </div>
+        <div class="w-half">
+          <label>Lot Size</label>
+          <input id="ipoLot" placeholder="119 shares" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Issue Size</label>
+          <input id="ipoIssueSize" placeholder="₹1,100 Cr" />
+        </div>
+        <div class="w-half">
+          <label>Min Investment</label>
+          <input id="ipoMinInv" placeholder="₹14,994" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Allotment Date</label>
+          <input id="ipoAllot" placeholder="23 Dec 2025" />
+        </div>
+        <div class="w-half">
+          <label>Listing Date</label>
+          <input id="ipoList" placeholder="27 Dec 2025" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>GMP</label>
+          <input id="ipoGmp" placeholder="+₹42" />
+        </div>
+        <div class="w-half">
+          <label>GMP View</label>
+          <input id="ipoGmpType" placeholder="Strong GMP" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>HNI / NII / Retail Subscriptions</label>
+          <input id="ipoSubs" placeholder="1.8x / 2.4x / 3.1x" />
+        </div>
+        <div class="w-half">
+          <label>Exchange</label>
+          <input id="ipoExch" placeholder="NSE / BSE" />
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="w-half">
+          <label>Registrar</label>
+          <input id="ipoRegistrar" placeholder="KFin Technologies" />
+        </div>
+        <div class="w-half">
+          <label>Industry</label>
+          <input id="ipoIndustry" placeholder="IT Services" />
+        </div>
+      </div>
+
+      <label>Detail URL</label>
+      <input id="ipoDetailUrl" placeholder="https://example.com" />
+
+      <div style="margin-top:12px;">
+        <button class="primary" id="btnSave">Save / Update</button>
+      </div>
+    </div>
+
+    <!-- Listing -->
+    <div class="card">
+      <h3>All IPOs</h3>
+      <div class="muted">Click "Load" to fetch from Firebase</div>
+      <div style="margin:10px 0;">
+        <button class="primary" id="btnLoad">Load</button>
+      </div>
+      <table id="ipoTable">
+        <thead>
+          <tr>
+            <th>ID</th><th>Name</th><th>Status</th><th>GMP</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Firebase v9 CDN -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, set, get, remove } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // Firebase config provided
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmXdzV3LDUe7CF0cHBKa6KD2vcPwZudCM",
+      authDomain: "ipo-jss.firebaseapp.com",
+      databaseURL: "https://ipo-jss-default-rtdb.firebaseio.com",
+      projectId: "ipo-jss",
+      storageBucket: "ipo-jss.firebasestorage.app",
+      messagingSenderId: "891300046260",
+      appId: "1:891300046260:web:bb76b822b506f02cfb7ee1",
+      measurementId: "G-VXDLQ74PP0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const tableBody = document.querySelector("#ipoTable tbody");
+    const f = (id) => document.getElementById(id);
+
+    // Save/Update IPO
+    document.getElementById("btnSave").onclick = async () => {
+      try {
+        const key = f("ipoId").value.trim();
+        if (!key) return alert("IPO ID is required");
+        const data = {
+          name: f("ipoName").value,
+          status: f("ipoStatus").value,
+          board: f("ipoBoard").value,
+          open: f("ipoOpen").value,
+          close: f("ipoClose").value,
+          priceBand: f("ipoPriceBand").value,
+          lot: f("ipoLot").value,
+          issueSize: f("ipoIssueSize").value,
+          minInvestment: f("ipoMinInv").value,
+          allotment: f("ipoAllot").value,
+          listing: f("ipoList").value,
+          gmp: f("ipoGmp").value,
+          gmpType: f("ipoGmpType").value,
+          subs: f("ipoSubs").value,
+          exchange: f("ipoExch").value,
+          registrar: f("ipoRegistrar").value,
+          industry: f("ipoIndustry").value,
+          detailUrl: f("ipoDetailUrl").value
+        };
+        await set(ref(db, "ipos/" + key), data);
+        alert("Saved");
+      } catch (e) {
+        console.error(e);
+        alert("Save failed: " + e.message);
+      }
+    };
+
+    // Load IPOs
+    document.getElementById("btnLoad").onclick = async () => {
+      try {
+        const snap = await get(ref(db, "ipos"));
+        const val = snap.val() || {};
+        tableBody.innerHTML = "";
+        Object.entries(val).forEach(([id, ipo]) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${id}</td>
+            <td>${ipo.name || ""}</td>
+            <td>${ipo.status || ""}</td>
+            <td>${ipo.gmp || ""}</td>
+            <td><button data-id="${id}" class="danger btn-del">Delete</button></td>
+          `;
+          tableBody.appendChild(tr);
+        });
+        tableBody.querySelectorAll(".btn-del").forEach(btn => {
+          btn.onclick = async () => {
+            try {
+              const id = btn.dataset.id;
+              await remove(ref(db, "ipos/" + id));
+              btn.closest("tr").remove();
+            } catch (e) {
+              alert("Delete failed: " + e.message);
+            }
+          };
+        });
+      } catch (e) {
+        console.error(e);
+        alert("Load failed: " + e.message);
+      }
+    };
+  </script>
+</body>
+</html>
